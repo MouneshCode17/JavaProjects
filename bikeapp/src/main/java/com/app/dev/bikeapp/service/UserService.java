@@ -29,7 +29,7 @@ public class UserService {
         String password = request.getPassword();
 
         if(!userRepository.existsByEmail(email)){
-            User user = new User(email,name,passwordEncoder.encode(password),role);
+            User user = new User(name,email,passwordEncoder.encode(password),role);
             User savedUser = userRepository.save(user);
 
             return new UserResponse(

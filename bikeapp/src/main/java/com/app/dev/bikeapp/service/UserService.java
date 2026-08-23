@@ -4,10 +4,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.dev.bikeapp.entity.Role;
-
 import com.app.dev.bikeapp.dto.RegisterRequest;
 import com.app.dev.bikeapp.dto.UserResponse;
+import com.app.dev.bikeapp.entity.Role;
 import com.app.dev.bikeapp.entity.User;
 import com.app.dev.bikeapp.exception.UserAlreadyExistsException;
 import com.app.dev.bikeapp.repository.UserRepository;
@@ -42,6 +41,10 @@ public class UserService {
         }else {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
+    }
+
+    public UserResponse toUserResponse(User user){
+        return new UserResponse(user.getId(),user.getName(),user.getEmail(),user.getRole(),user.getCreatedAt());
     }
 
 }

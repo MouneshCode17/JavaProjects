@@ -6,9 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dev.bikeapp.dto.RegisterRequest;
 import com.app.dev.bikeapp.dto.UserResponse;
+import com.app.dev.bikeapp.entity.DriverProfile;
 import com.app.dev.bikeapp.entity.Role;
 import com.app.dev.bikeapp.entity.User;
 import com.app.dev.bikeapp.exception.UserAlreadyExistsException;
+import com.app.dev.bikeapp.repository.DriverProfileRepository;
 import com.app.dev.bikeapp.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DriverProfileRepository driverProfileRepository;
 
     @Transactional
     public UserResponse register(RegisterRequest request,Role role){
@@ -31,13 +34,19 @@ public class UserService {
             User user = new User(name,email,passwordEncoder.encode(password),role);
             User savedUser = userRepository.save(user);
 
-            return new UserResponse(
-                savedUser.getId(),
-                savedUser.getName(),
-                savedUser.getEmail(),
-                savedUser.getRole(),
-                savedUser.getCreatedAt()
-            );
+            var userRole = savedUser.getRole();
+
+            if(userRole == Role.DRIVER){
+
+                DriverProfile driverProfile = new DriverProfile();
+
+                driverProfile.setUser(savedUser);
+                driverProfile.setAvailable(false);
+                driverProfileRepository.save(driverProfile);
+
+            }
+
+            return toUserResponse(savedUser);
         }else {
             throw new UserAlreadyExistsException("User with this email already exists");
         }

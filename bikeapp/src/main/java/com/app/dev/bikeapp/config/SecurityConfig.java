@@ -29,6 +29,10 @@ public class SecurityConfig{
                                     .permitAll()
                                     .requestMatchers("/api/auth/rider")
                                     .hasRole("RIDER")
+
+                                    .requestMatchers("/api/driver/**")
+                                    .hasRole("DRIVER")
+                                    
                                     .anyRequest()
                                     .authenticated()
                                   )

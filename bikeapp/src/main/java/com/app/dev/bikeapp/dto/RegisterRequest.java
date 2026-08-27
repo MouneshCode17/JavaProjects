@@ -20,4 +20,7 @@ public class RegisterRequest {
 
     @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    @NotBlank
+    private String phoneNumber;
 }

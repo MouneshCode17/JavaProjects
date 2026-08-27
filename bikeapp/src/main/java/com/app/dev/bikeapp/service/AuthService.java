@@ -22,21 +22,20 @@ public class AuthService{
 
     public LoginResponse authenticateUser(LoginRequest loginRequest){
         
-        var email = loginRequest.getEmail();
+        var phoneNumber = loginRequest.getPhoneNumber();
         var password = loginRequest.getPassword();
 
-        var userObject = userRepository.findByEmail(email)
+        var userObject = userRepository.findByPhoneNumber(phoneNumber)
         .orElseThrow(() ->
                 new AuthenticationCredentialsNotFoundException(
-                        "User Email and password are incorrect"
+                        "User phone number or password are incorrect"
                 ));
 
         if(!passwordEncoder.matches(password, userObject.getPassword()))    throw new AuthenticationCredentialsNotFoundException("User Email and password are incorrect");
 
-
             var token = jwtService.generateToken(userObject);
 
-            log.info("Token generated successfully:{}",token);
+            log.info("Token generated successfully");
             
             return new LoginResponse(token);
             

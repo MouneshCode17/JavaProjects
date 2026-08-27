@@ -14,7 +14,11 @@ public abstract interface UserRepository extends JpaRepository<User,UUID>{
 
     Optional<User> findByEmail(String email);
 
-    @SQL("insert into users (name, email, password, role) values (:name, :email, :password, :role)")
+    Optional<User> findByPhoneNumber(String phoneNumber);
+
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    @SQL("insert into users (name, email, phoneNumber, password, role) values (:name, :email, :phoneNumber, :password, :role)")
     User save(User user);
 
 }

@@ -17,9 +17,10 @@ import lombok.NoArgsConstructor;
 @Table(name ="users")
 public class User{
 
-    public User(String name, String email, String password, Role role) {
+    public User(String name, String email, String phoneNumber, String password, Role role) {
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.role = role;
     }
@@ -31,7 +32,7 @@ public class User{
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)    
+    @Column(unique = true)    
     private String email;
 
  
@@ -44,4 +45,7 @@ public class User{
 
     @CreationTimestamp
     private Instant createdAt;
+
+    @Column(nullable = false, unique = true)    
+    private String phoneNumber;
 }

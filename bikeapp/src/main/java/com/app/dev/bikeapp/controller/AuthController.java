@@ -14,6 +14,7 @@ import com.app.dev.bikeapp.dto.UserResponse;
 import com.app.dev.bikeapp.entity.User;
 import com.app.dev.bikeapp.service.AuthService;
 import com.app.dev.bikeapp.service.UserService;
+import com.app.dev.bikeapp.entity.Role;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +44,6 @@ public class AuthController {
 
     @GetMapping("/current/user")
     public UserResponse getCurrentUser(Authentication authentication) {
-
-        System.out.println("hello"+authentication);
 
         var user = (User)authentication.getPrincipal();
 

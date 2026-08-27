@@ -12,6 +12,11 @@ import lombok.RequiredArgsConstructor;
 import com.app.dev.bikeapp.entity.User;
 import com.app.dev.bikeapp.service.DriverService;
 
+import java.util.UUID;
+import org.springframework.web.bind.annotation.PathVariable;
+import com.app.dev.bikeapp.dto.RideResponse;
+import com.app.dev.bikeapp.entity.User;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/driver")
@@ -31,4 +36,14 @@ public class DriverController {
         return available ? "Driver is Online" : "Driver is Offline";
 
     }
+
+    @PatchMapping("/rides/{rideId}/accept")
+    public RideResponse acceptRide(
+        @PathVariable UUID rideId,
+        Authentication authentication) {
+
+    User driver = (User) authentication.getPrincipal();
+
+    return driverService.acceptRide(rideId, driver);
+}
 }

@@ -1,5 +1,6 @@
 package com.app.dev.bikeapp.service;
 
+import com.app.dev.bikeapp.repository.DriverProfileRepository;
 import com.app.dev.bikeapp.repository.RideRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ import com.app.dev.bikeapp.entity.User;
 public class RideService {
 
     private final RideRepository rideRepository;
+    private final DriverProfileRepository driverProfileRepository;
 
     public RideResponse createRide(RideRequest rideRequest,Authentication authentication) {
         
@@ -29,6 +31,18 @@ public class RideService {
         ride.setPickupLocation(rideRequest.getPickupLocation());
         ride.setDropLocation(rideRequest.getDropoffLocation());
         ride.setStatus(RideStatus.REQUESTED);
+
+        var availableDrivers = driverProfileRepository.findByAvailableTrue();
+        if(availableDrivers.isEmpty()){
+            throw new RuntimeException("No available drivers at the moment");
+        }
+
+        var driverProfile = availableDrivers.get(0);
+        ride.setDriver(driverProfile.getUser());
+
+        System.out.println("ASSIGNED DRIVER: " + driverProfile.getUser().getId());
+        driverProfile.setAvailable(false);
+        driverProfileRepository.save(driverProfile);
 
         Ride savedRide = rideRepository.save(ride);
 

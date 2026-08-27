@@ -29,9 +29,15 @@ public class UserService {
         String email = request.getEmail();
         String name = request.getName();
         String password = request.getPassword();
+        String phoneNumber = request.getPhoneNumber();
 
-        if(!userRepository.existsByEmail(email)){
-            User user = new User(name,email,passwordEncoder.encode(password),role);
+        if(userRepository.existsByEmail(email) || userRepository.existsByPhoneNumber(phoneNumber)){
+    
+            throw new UserAlreadyExistsException("User with this email or phoneNumber already exists");
+        }else 
+            {
+
+            User user = new User(name,email,phoneNumber,passwordEncoder.encode(password),role);
             User savedUser = userRepository.save(user);
 
             var userRole = savedUser.getRole();
@@ -47,8 +53,6 @@ public class UserService {
             }
 
             return toUserResponse(savedUser);
-        }else {
-            throw new UserAlreadyExistsException("User with this email already exists");
         }
     }
 

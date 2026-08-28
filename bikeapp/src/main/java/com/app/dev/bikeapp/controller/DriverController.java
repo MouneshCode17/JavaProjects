@@ -42,8 +42,30 @@ public class DriverController {
         @PathVariable UUID rideId,
         Authentication authentication) {
 
+            System.out.println("ACCEPT RIDE CONTROLLER REACHED");
+
     User driver = (User) authentication.getPrincipal();
 
     return driverService.acceptRide(rideId, driver);
+}
+
+    @PatchMapping("/rides/{rideId}/start")
+    public RideResponse startRide(
+        @PathVariable UUID rideId,
+        Authentication authentication) {
+
+    User driver = (User) authentication.getPrincipal();
+
+    return driverService.startRide(rideId, driver);
+}
+
+    @PatchMapping("/rides/{rideId}/complete")
+    public RideResponse completeRide(
+        @PathVariable UUID rideId,
+        Authentication authentication) {
+
+    User driver = (User) authentication.getPrincipal();
+
+    return driverService.completeRide(rideId, driver);
 }
 }

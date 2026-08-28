@@ -11,7 +11,9 @@ public record UserResponse (
      String name,
      String email,
      Role role,
-     Instant createdAt
+     Instant createdAt,
+     String phoneNumber,
+     String ridePin
 ){
     
 }

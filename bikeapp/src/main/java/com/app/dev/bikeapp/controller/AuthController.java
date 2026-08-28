@@ -50,11 +50,6 @@ public class AuthController {
         return userService.toUserResponse(user);
     }
 
-    @GetMapping("/rider")
-    public String riderOnly() {
-    return "Welcome Rider";
-    }
-
     @PostMapping("/register/driver")
     public UserResponse registerDriver(@RequestBody @Valid RegisterRequest request) {
     return userService.register(request, Role.DRIVER);

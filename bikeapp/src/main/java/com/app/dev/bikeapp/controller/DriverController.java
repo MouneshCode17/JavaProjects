@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 import lombok.RequiredArgsConstructor;
 
 import com.app.dev.bikeapp.entity.User;
 import com.app.dev.bikeapp.service.DriverService;
+import com.app.dev.bikeapp.dto.StartRideRequest;
 
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,11 +54,12 @@ public class DriverController {
     @PatchMapping("/rides/{rideId}/start")
     public RideResponse startRide(
         @PathVariable UUID rideId,
-        Authentication authentication) {
+        Authentication authentication,
+        @RequestBody StartRideRequest startRideRequest) {
 
     User driver = (User) authentication.getPrincipal();
 
-    return driverService.startRide(rideId, driver);
+    return driverService.startRide(rideId, driver, startRideRequest.getRidePin());
 }
 
     @PatchMapping("/rides/{rideId}/complete")

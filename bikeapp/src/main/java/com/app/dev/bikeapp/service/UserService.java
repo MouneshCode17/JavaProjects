@@ -3,6 +3,7 @@ package com.app.dev.bikeapp.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.security.SecureRandom;
 
 import com.app.dev.bikeapp.dto.RegisterRequest;
 import com.app.dev.bikeapp.dto.UserResponse;
@@ -30,6 +31,7 @@ public class UserService {
         String name = request.getName();
         String password = request.getPassword();
         String phoneNumber = request.getPhoneNumber();
+        String ridePin = String.format("%04d", new SecureRandom().nextInt(10000));
 
         if(userRepository.existsByEmail(email) || userRepository.existsByPhoneNumber(phoneNumber)){
     
@@ -37,7 +39,7 @@ public class UserService {
         }else 
             {
 
-            User user = new User(name,email,phoneNumber,passwordEncoder.encode(password),role);
+            User user = new User(name,email,phoneNumber,passwordEncoder.encode(password),role,ridePin);
             User savedUser = userRepository.save(user);
 
             var userRole = savedUser.getRole();
@@ -57,7 +59,7 @@ public class UserService {
     }
 
     public UserResponse toUserResponse(User user){
-        return new UserResponse(user.getId(),user.getName(),user.getEmail(),user.getRole(),user.getCreatedAt());
+        return new UserResponse(user.getId(),user.getName(),user.getEmail(),user.getRole(),user.getCreatedAt(),user.getPhoneNumber(),user.getRidePin());
     }
 
 }

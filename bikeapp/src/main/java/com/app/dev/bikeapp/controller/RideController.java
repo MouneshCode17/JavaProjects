@@ -1,5 +1,10 @@
 package com.app.dev.bikeapp.controller;
 
+import java.util.UUID;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import com.app.dev.bikeapp.entity.User;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/rider")
 public class RideController {
 
     private final RideService rideService;
@@ -27,4 +32,14 @@ public class RideController {
 
         return rideService.createRide(request, authentication);
     }
+
+    @PatchMapping("/rides/{rideId}/cancel") 
+     public RideResponse cancelRide(
+        @PathVariable UUID rideId,
+        Authentication authentication) {
+
+    User rider = (User) authentication.getPrincipal();
+
+    return rideService.cancelRide(rideId, rider);
+}
 }

@@ -52,5 +52,5 @@ public class Ride {
     private Instant createdAt;
 
     @UpdateTimestamp
-    private Instant updatedAt;
+    private Instant updatedAt;    
 }

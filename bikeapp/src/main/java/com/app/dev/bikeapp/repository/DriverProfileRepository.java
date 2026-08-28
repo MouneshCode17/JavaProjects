@@ -6,9 +6,14 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import jakarta.persistence.LockModeType;
+import org.springframework.data.jpa.repository.Lock;
+
 import com.app.dev.bikeapp.entity.DriverProfile;
 
 public interface DriverProfileRepository extends JpaRepository<DriverProfile, UUID>{
      Optional<DriverProfile> findByUserId(UUID userId);
-     List<DriverProfile> findByAvailableTrue();
+
+     @Lock(LockModeType.PESSIMISTIC_WRITE)
+     List<DriverProfile> findFirstByAvailableTrue();
 }

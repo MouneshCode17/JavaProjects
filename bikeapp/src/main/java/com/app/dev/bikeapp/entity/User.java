@@ -17,12 +17,13 @@ import lombok.NoArgsConstructor;
 @Table(name ="users")
 public class User{
 
-    public User(String name, String email, String phoneNumber, String password, Role role) {
+    public User(String name, String email, String phoneNumber, String password, Role role, String ridePin) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.role = role;
+        this.ridePin = ridePin;
     }
 
     @Column(nullable = false) 
@@ -48,4 +49,6 @@ public class User{
 
     @Column(nullable = false, unique = true)    
     private String phoneNumber;
+
+    private String ridePin;
 }

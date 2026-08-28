@@ -15,6 +15,10 @@ import com.app.dev.bikeapp.dto.RideStatus;
 import com.app.dev.bikeapp.dto.RideResponse;
 import com.app.dev.bikeapp.repository.RideRepository;
 
+import com.app.dev.bikeapp.exception.ResourceNotFoundException;
+import com.app.dev.bikeapp.exception.UnAuthorizedRideException;
+import com.app.dev.bikeapp.exception.InvalidRideStateException;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +34,7 @@ public class DriverService {
     var driverProfile = driverProfileRepository
             .findByUserId(userId)
             .orElseThrow(() ->
-                    new RuntimeException("Driver profile not found"));
+                    new ResourceNotFoundException("Driver profile not found"));
 
     driverProfile.setAvailable(available);
 
@@ -39,23 +43,20 @@ public class DriverService {
 
     public List<DriverProfile> getAvailableDrivers() {
         
-        return driverProfileRepository.findByAvailableTrue();
+        return driverProfileRepository.findFirstByAvailableTrue();
     }
 
     public RideResponse acceptRide(UUID rideId, User driver) {
 
     Ride ride = rideRepository.findById(rideId)
             .orElseThrow(() ->
-                    new RuntimeException("Ride not found"));
-
-    if (ride.getDriver() == null
-            || !ride.getDriver().getId().equals(driver.getId())) {
-        throw new RuntimeException("You are not assigned to this ride");
-    }
+                    new ResourceNotFoundException("Ride not found"));
 
     if (ride.getStatus() != RideStatus.REQUESTED) {
-        throw new RuntimeException("Ride cannot be accepted");
+        throw new InvalidRideStateException("Ride cannot be accepted");
     }
+
+    ride.setDriver(driver);
 
     ride.setStatus(RideStatus.ACCEPTED);
 
@@ -74,22 +75,28 @@ public class DriverService {
     );
 }
 
-    public RideResponse startRide(UUID rideId, User driver) {
+    public RideResponse startRide(UUID rideId, User driver, String ridePin) {
 
     Ride ride = rideRepository.findById(rideId)
             .orElseThrow(() ->
-                    new RuntimeException("Ride not found"));
+                    new ResourceNotFoundException("Ride not found"));
 
     if (ride.getDriver() == null ||
             !ride.getDriver().getId().equals(driver.getId())) {
 
-        throw new RuntimeException(
+        throw new UnAuthorizedRideException(
                 "You are not assigned to this ride");
     }
 
     if (ride.getStatus() != RideStatus.ACCEPTED) {
-        throw new RuntimeException(
+        throw new InvalidRideStateException(
                 "Ride cannot be started");
+    }
+
+    var rider = ride.getRider();
+    if (rider == null || rider.getRidePin() == null || !rider.getRidePin().equals(ridePin)) {
+        throw new InvalidRideStateException(
+                "Invalid ride PIN");
     }
 
     ride.setStatus(RideStatus.STARTED);
@@ -113,17 +120,17 @@ public class DriverService {
 
     Ride ride = rideRepository.findById(rideId)
             .orElseThrow(() ->
-                    new RuntimeException("Ride not found"));
+                    new ResourceNotFoundException("Ride not found"));
 
     if (ride.getDriver() == null ||
             !ride.getDriver().getId().equals(driver.getId())) {
 
-        throw new RuntimeException(
+        throw new UnAuthorizedRideException(
                 "You are not assigned to this ride");
     }
 
     if (ride.getStatus() != RideStatus.STARTED) {
-        throw new RuntimeException(
+        throw new InvalidRideStateException(
                 "Ride cannot be completed");
     }
 
@@ -143,4 +150,5 @@ public class DriverService {
             savedRide.getUpdatedAt()
     );
 }
+
 }

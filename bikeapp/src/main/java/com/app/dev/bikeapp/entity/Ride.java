@@ -41,7 +41,15 @@ public class Ride {
 
     private String pickupLocation;
 
+    private Double pickupLatitude;
+
+    private Double pickupLongitude;
+
     private String dropLocation;
+
+    private Double dropLatitude;
+
+    private Double dropLongitude;
 
     @Enumerated(EnumType.STRING)
     private RideStatus status;
@@ -52,5 +60,9 @@ public class Ride {
     private Instant createdAt;
 
     @UpdateTimestamp
-    private Instant updatedAt;    
+    private Instant updatedAt;
+
+    private String cancellationOtp;
+
+    private Instant cancellationOtpExpiry;
 }

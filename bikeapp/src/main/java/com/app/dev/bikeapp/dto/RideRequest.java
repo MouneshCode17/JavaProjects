@@ -9,5 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RideRequest {
     private String pickupLocation;
+    private Double pickupLatitude;
+    private Double pickupLongitude;
     private String dropoffLocation;
+    private Double dropLatitude;
+    private Double dropLongitude;
+
 }

@@ -25,5 +25,9 @@ public class DriverProfile {
     private User user;
 
     private boolean available;
+
+    private Double latitude;
+    
+    private Double longitude;
     
 }

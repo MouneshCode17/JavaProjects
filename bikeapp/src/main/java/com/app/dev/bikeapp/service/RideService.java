@@ -34,7 +34,11 @@ public class RideService {
         
         ride.setRider(rider);
         ride.setPickupLocation(rideRequest.getPickupLocation());
+        ride.setPickupLatitude(rideRequest.getPickupLatitude());
+        ride.setPickupLongitude(rideRequest.getPickupLongitude());
         ride.setDropLocation(rideRequest.getDropoffLocation());
+        ride.setDropLatitude(rideRequest.getDropLatitude());
+        ride.setDropLongitude(rideRequest.getDropLongitude());
         ride.setStatus(RideStatus.REQUESTED);
 
         Ride savedRide = rideRepository.save(ride);

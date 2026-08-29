@@ -16,4 +16,6 @@ public interface DriverProfileRepository extends JpaRepository<DriverProfile, UU
 
      @Lock(LockModeType.PESSIMISTIC_WRITE)
      List<DriverProfile> findFirstByAvailableTrue();
+
+     List<DriverProfile> findByAvailableTrue();
 }

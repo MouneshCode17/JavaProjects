@@ -19,6 +19,7 @@ import com.app.dev.bikeapp.entity.User;
 import com.app.dev.bikeapp.service.DriverService;
 import com.app.dev.bikeapp.dto.StartRideRequest;
 import com.app.dev.bikeapp.dto.DriverCancellationRequest;
+import com.app.dev.bikeapp.entity.Ride;
 
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -138,4 +139,36 @@ public class DriverController {
             radiusKm
     );
 }
+
+    @GetMapping("/rides/requests")
+    public List<Ride> getRideRequests() {
+    return driverService.getRideRequests();
 }
+
+    @PatchMapping("/rides/{rideId}/arrive")
+    public RideResponse arriveRide(
+        @PathVariable UUID rideId,
+        Authentication authentication) {
+
+    User driver = (User) authentication.getPrincipal();
+
+    return driverService.arriveRide(rideId, driver);
+}
+
+  @PatchMapping("/location")
+  public String updateLocation(
+        @RequestParam double latitude,
+        @RequestParam double longitude,
+        Authentication authentication) {
+
+    User driver = (User) authentication.getPrincipal();
+
+    driverService.updateLocation(
+            driver.getId(),
+            latitude,
+            longitude
+    );
+
+    return "Driver location updated";
+}
+} 

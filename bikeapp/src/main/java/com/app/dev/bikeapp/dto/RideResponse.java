@@ -3,6 +3,7 @@ package com.app.dev.bikeapp.dto;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+import com.app.dev.bikeapp.dto.DriverInfoResponse;
 
 
 public record RideResponse(
@@ -14,6 +15,8 @@ public record RideResponse(
         RideStatus status,
         BigDecimal fare,
         Instant createdAt,
-        Instant updatedAt
+        Instant updatedAt,
+        BigDecimal cancellationFee,
+        DriverInfoResponse driverInfo
 ) {
 }

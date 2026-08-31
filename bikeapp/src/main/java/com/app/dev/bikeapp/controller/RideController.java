@@ -8,6 +8,7 @@ import com.app.dev.bikeapp.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.dev.bikeapp.dto.RideRequest;
@@ -41,5 +42,13 @@ public class RideController {
     User rider = (User) authentication.getPrincipal();
 
     return rideService.cancelRide(rideId, rider);
+}
+
+    @GetMapping("/ride/active")
+    public RideResponse getActiveRide(Authentication authentication) {
+
+    User rider = (User) authentication.getPrincipal();
+
+    return rideService.getActiveRide(rider);
 }
 }

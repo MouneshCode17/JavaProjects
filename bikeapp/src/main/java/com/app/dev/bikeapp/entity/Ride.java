@@ -56,6 +56,8 @@ public class Ride {
 
     private BigDecimal fare;
 
+    private BigDecimal cancellationFee;
+
     @CreationTimestamp
     private Instant createdAt;
 
